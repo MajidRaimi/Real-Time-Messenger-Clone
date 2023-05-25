@@ -5,6 +5,7 @@ import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 import { If, Then } from 'react-if';
 import classnames from "classnames";
 import { BsGithub, BsGoogle } from 'react-icons/bs';
+import axios from "axios"
 
 import { AuthSocialButton } from './';
 import { Variant } from "../types";
@@ -43,7 +44,7 @@ const AuthForm = () => {
         }
 
         if (variant === "REGISTER") {
-            // axios Register
+            axios.post('/api/register', data)
         }
     };
 

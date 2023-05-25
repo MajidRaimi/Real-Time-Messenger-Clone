@@ -11,7 +11,7 @@ import {
 interface InputProps {
   label: string;
   id: string;
-  type?: string;
+  type?: 'text' | 'email' | 'password';
   required?: boolean;
   register: UseFormRegister<FieldValues>;
   errors: FieldErrors<FieldValues>;
@@ -38,7 +38,8 @@ const Input: React.FC<InputProps> = ({
       <input
         id={id}
         autoComplete={id}
-        type="text"
+        type={type}
+
         className={classnames('input input-bordered w-full ', { errors: 'input-error' })}
         disabled={disabled}
         {...register(id, { required })}
