@@ -39,13 +39,13 @@ const Input: React.FC<InputProps> = ({
         id={id}
         autoComplete={id}
         type="text"
-        className={classnames('input input-bordered w-full ', { errors: 'input-error', disabled: 'input-disabled' })}
+        className={classnames('input input-bordered w-full ', { errors: 'input-error' })}
         disabled={disabled}
         {...register(id, { required })}
 
       />
 
-      { }
+
     </div>
   )
 }
