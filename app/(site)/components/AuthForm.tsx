@@ -1,20 +1,33 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 import { If, Then } from 'react-if';
 import classnames from "classnames";
 import { BsGithub, BsGoogle } from 'react-icons/bs';
 import axios from "axios"
+import { toast } from 'react-hot-toast';
+import { signIn, useSession, } from 'next-auth/react';
+import { useRouter } from "next/navigation";
+
 
 import { AuthSocialButton } from './';
 import { Variant } from "../types";
 import { Input, Button } from "@/app/components";
 
-
 const AuthForm = () => {
+    const session = useSession();
+    const router = useRouter();
     const [variant, setVariant] = useState<Variant>("LOGIN");
     const [isLoading, setIsLoading] = useState<boolean>(false);
+
+    useEffect(() => {
+        if (session?.status === 'authenticated') {
+            router.push('/users')
+        }
+    }, [session?.status, router]);
+
+
 
     const toggleVariant = useCallback(() => {
         if (variant === "LOGIN") {
@@ -40,16 +53,43 @@ const AuthForm = () => {
         setIsLoading(true);
 
         if (variant === "LOGIN") {
-            // nextAuth Login
+            signIn('credentials', {
+                ...data,
+                redirect: false,
+            }).then((callback) => {
+                if (callback?.error) {
+                    toast.error('Please check your credentials')
+                }
+
+                if (callback?.ok && !callback?.error) {
+                    toast.success('Logged in successfully')
+                }
+
+            }).finally(() => setIsLoading(false))
         }
 
         if (variant === "REGISTER") {
             axios.post('/api/register', data)
+                .then(() => signIn('credentials', data))
+                .catch((error) => toast.error(error.response.data.message))
+                .finally(() => setIsLoading(false))
         }
     };
 
     const socialAction = (action: string) => {
         setIsLoading(true);
+
+        signIn(action, {
+            redirect: false,
+        }).then((callback) => {
+            if (callback?.error) {
+                toast.error('Something went wrong')
+            }
+            if (callback?.ok && !callback?.error) {
+                toast.success('Logged in successfully')
+                router.push('/users');
+            }
+        }).finally(() => setIsLoading(false));
 
         // nextAuth Social Login
     };
@@ -111,9 +151,9 @@ const AuthForm = () => {
                     <AuthSocialButton icon={BsGoogle} onClick={() => socialAction('googleBsGoogle')} />
                 </div>
 
-                <div className='text-center mt-6 text-sm text-sky-500 cursor-pointer' onClick={toggleVariant}>
+                <p className='text-center mt-6 text-sm text-primary cursor-pointer w-auto block' onClick={toggleVariant}>
                     {variant === "LOGIN" ? 'New to us?' : 'Already have an account?'}
-                </div>
+                </p>
 
 
             </div>

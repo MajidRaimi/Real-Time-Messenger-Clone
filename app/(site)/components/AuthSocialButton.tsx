@@ -5,13 +5,13 @@ interface AuthSocialButtonProps {
     onClick: () => void;
 }
 
-const AuthSocialButton : React.FC<AuthSocialButtonProps> = ({
-    icon : Icon,
+const AuthSocialButton: React.FC<AuthSocialButtonProps> = ({
+    icon: Icon,
     onClick
 }) => {
     return (
-        <button type='button' onClick={onClick} className='btn btn-ghost grow btn-active bg-opacity-50'>
-            <Icon className=''/>
+        <button type='button' onClick={onClick} className='btn bg-slate-100 border-transparent hover:bg-primary group grow btn-active  '>
+            <Icon className='text-primary group-hover:text-white' />
         </button>
     )
 }

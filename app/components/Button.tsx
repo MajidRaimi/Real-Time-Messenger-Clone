@@ -22,11 +22,10 @@ const Button: React.FC<ButtonProps> = ({
         <button
             onClick={onClick}
             type={type}
-            className={classnames('btn ', { 'btn-secondary': secondary, 'btn-error text-white': danger, 'btn-disabled': disabled ,  'w-full' : fullWidth })}
+            className={classnames('btn btn-primary', { 'btn-secondary': secondary, 'btn-error text-white': danger, 'loading': disabled, 'w-full': fullWidth })}
             disabled={disabled}
         >
             {children}
-
         </button>
     )
 }

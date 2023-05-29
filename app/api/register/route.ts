@@ -5,13 +5,14 @@ import { NextResponse } from 'next/server';
 
 export async function POST(
     request: Request,
+    response: Response
 ) {
     try {
         const body = await request.json();
         const { email, name, password } = body;
 
         if (!email || !name || !password) {
-            return new NextResponse("Please fill all the fields", { status: 400 });
+            return NextResponse.json({ message: "Please fill all the fields" }, { status: 400 });
         }
 
         const hashedPassword = await bcrypt.hash(password, 12);
@@ -28,8 +29,10 @@ export async function POST(
             user
         });
     } catch (error: any) {
-        console.log(error , 'REGISTRATION_ERROR')
-        return new NextResponse('Internal Error', { status: 500 });
+        console.log(error, 'REGISTRATION_ERROR')
+        return NextResponse.json({
+            message: 'Registration failed',
+        }, { status: 500 });
     }
 }
 
